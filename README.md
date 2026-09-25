@@ -11,9 +11,8 @@ Developed as part of the Technical Assessment for **EZORO DIGITAL SOLUTIONS LLP*
 2. [Installation & Setup Instructions](#2-installation--setup-instructions)
 3. [Standard ERPNext Features vs Customizations](#3-standard-erpnext-features-vs-customizations)
 4. [Assumptions Made During Implementation](#4-assumptions-made-during-implementation)
-5. [Automated Test Suite](#5-automated-test-suite)
-6. [Task 10: Deep-Dive Debugging Exercise (PR Mismatch Issue)](#6-task-10-deep-dive-debugging-exercise)
-7. [Task 12: Technical Architecture & Governance Answers](#7-task-12-technical-architecture--governance-answers)
+5. [Task 10: Deep-Dive Debugging Exercise (PR Mismatch Issue)](#6-task-10-deep-dive-debugging-exercise)
+6. [Task 12: Technical Architecture & Governance Answers](#7-task-12-technical-architecture--governance-answers)
 
 ---
 
@@ -129,22 +128,6 @@ Following the **Important Assessment Principles**, standard ERPNext features wer
 3. **Perpetual Inventory Enabled**: Both companies maintain real-time automated stock accounting. Goods received into warehouse immediately credit the clearing account / trade payable and debit the inventory asset ledger.
 4. **Single Tax Regime in Baseline Phase**: Intercompany trade was configured under cross-border zero-rated/standard pricing, pending Phase 2 ZATCA tax rules.
 5. **Warehouse Hierarchy**: Metal Green utilizes standard warehouse separation: raw unloading into `Stores - MGSA`, and secondary staging / production output into `Finished Goods - MGSA`.
-
----
-
-## 5. Automated Test Suite
-
-A dedicated unit test suite is included in the custom app to validate report execution, column integrity, and data matching.
-
-### Running the Tests
-```bash
-bench --site machinetest.local run-tests --module intercompany_tracker.intercompany_tracker.report.intercompany_transaction_tracker.test_intercompany_transaction_tracker
-```
-
-### Test Coverage:
-- Verifies that all 10 report columns are generated with correct fieldtypes and alignment.
-- Validates the cross-company join between `Sales Invoice` and `Purchase Invoice`.
-- Asserts that transaction quantity (100 MT), unit rate (SAR 2,000), and total value (SAR 200,000) match between legal entities.
 
 ---
 
