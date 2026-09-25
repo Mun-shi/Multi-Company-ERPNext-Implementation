@@ -63,7 +63,7 @@ This implementation models an international circular economy and scrap metal tra
 cd /home/ubuntu/frappe-bench
 
 # 2. Get the app from GitHub (or local apps folder)
-bench get-app https://github.com/<your-username>/intercompany_tracker.git
+bench get-app https://github.com/Mun-shi/Multi-Company-ERPNext-Implementation.git
 
 # 3. Install the app on your site
 bench --site machinetest.local install-app intercompany_tracker
