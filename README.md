@@ -236,11 +236,17 @@ We achieved over **90% of the entire assessment scope** using native, un-customi
 - Placing this in a custom app ensures clean separation of concerns, zero core code modification, and complete portability across environments.
 
 ### Question 4: What would you change or improve before deploying this solution to production?
-1. **Automated Intercompany Reconciliation**: Implement a background job (`hooks.py` scheduler) that automatically reconciles outstanding intercompany receivables and payables and alerts the finance team of any pricing or quantity discrepancies.
-2. **Automated Currency Revaluation**: Schedule the native `Currency Exchange Revaluation` tool at each month-end to unrealized foreign exchange gains or losses on foreign currency party accounts.
-3. **Enhanced Validation Hooks**: Introduce an event hook on `Sales Invoice.validate` ensuring that intercompany selling rates never fall below the original procurement cost from external suppliers, protecting gross margins.
-4. **Granular Role Hierarchy**: Create specific corporate roles (`Ecofinit Commercial Approver`, `Metal Green Plant Manager`) rather than relying on generic manager roles.
-5. **CI/CD Integration**: Connect GitHub Actions to run automated linter (`ruff`), unit tests, and bench migration tests on pull requests before deployment to staging/production benches.
+1. **Database Indexing & Query Optimization**:
+   - Add a composite index on `tabPurchase Invoice (inter_company_invoice_reference, docstatus, posting_date)`.
+   - In the report query, eliminate the N+1 `frappe.db.get_value` queries inside the loop by doing a single bulk join. When transactions grow from 10 to 100,000 records, this prevents table scans and database CPU spikes.
+
+2. **Prepared Reports for Heavy Reconciliation**:
+   - Enable `prepared_report = 1` in the report configuration. For large month-end audit runs, this offloads report execution to Redis queue background workers instead of blocking web workers and timing out.
+
+3. **Margin Protection via Validation Hooks**:
+   - Introduce a `doc_events` hook on `Sales Invoice.validate` ensuring that intercompany selling rates never fall below the original procurement cost from external suppliers, safeguarding commercial margins.
+
+
 
 ### Question 5: How would you approach Saudi VAT and ZATCA e-invoicing integration for Metal Green at a later stage?
 Saudi Arabia mandates strict e-invoicing compliance under ZATCA (Zakat, Tax and Customs Authority). The integration would be structured in two phases:
