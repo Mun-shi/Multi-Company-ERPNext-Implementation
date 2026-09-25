@@ -14,7 +14,6 @@ Developed as part of the Technical Assessment for **EZORO DIGITAL SOLUTIONS LLP*
 5. [Automated Test Suite](#5-automated-test-suite)
 6. [Task 10: Deep-Dive Debugging Exercise (PR Mismatch Issue)](#6-task-10-deep-dive-debugging-exercise)
 7. [Task 12: Technical Architecture & Governance Answers](#7-task-12-technical-architecture--governance-answers)
-8. [End-to-End Demonstration Walkthrough (5-10 Min Script)](#8-end-to-end-demonstration-walkthrough)
 
 ---
 
@@ -302,64 +301,6 @@ In an enterprise multi-company deployment (e.g. adding a 3rd entity like an Indi
    - Internal Customer/Supplier pairs restricted to specific intercompany transaction roles, ensuring unauthorized staff cannot trigger cross-company liability entries.
 
 ---
-
-## 8. End-to-End Demonstration Walkthrough
-
-During the technical review, follow this sequential 5-to-10 minute demonstration:
-
-### Step 1: Corporate Structure & Master Verification (Task 1)
-- Open **Company List**: Show `Ecofinit Dubai` (AED) and `Metal Green Saudi Arabia` (SAR).
-- Open **Currency Exchange List**: Show `SAR` to `AED` fixed @ `0.98`.
-- Open **Customer `Metal Green Saudi Arabia`**: Highlight `Internal Customer = Yes` linked to `Ecofinit Dubai`.
-- Open **Supplier `Ecofinit Dubai`**: Highlight `Internal Supplier = Yes` linked to `Metal Green Saudi Arabia`.
-- Open **Item Master `Aluminium Dross`**: Show unit of measure `MT` and stock tracking enabled.
-
-### Step 2: External Procurement & 3 Partial Receipts (Task 2)
-- Open **Purchase Order `PUR-ORD-2026-00001`**:
-  - Show Supplier: `Global Metal Trading LLC`, Qty: `100 MT`, Rate: `SAR 2,000`, Total: `SAR 200,000`.
-- Open **Connections / Dashboard**:
-  - Show GRN 1 (`MAT-PRE-2026-00001`): `30 MT`.
-  - Show GRN 2 (`MAT-PRE-2026-00002`): `40 MT` (demonstrating the 70 MT verified checkpoint).
-  - Show GRN 3: `30 MT`.
-  - Show PO status: **100% Received / To Bill**.
-
-### Step 3: Supplier Invoicing & Document Attachment (Task 3)
-- Open **Purchase Invoice `ACC-PINV-2026-00001`**:
-  - Show 100 MT billed @ SAR 200,000.
-  - Point to **Attachments** on the left sidebar: Click and preview `Supplier_Commercial_Invoice_BL10023.pdf.txt`, proving native file storage without custom code.
-
-### Step 4: Sales Value Approval Workflow (Task 4)
-- Open **Workflow List** $\rightarrow$ Show `Sales Order Approval` states and transition matrix.
-- Open **Sales Order `SAL-ORD-2026-00001`**:
-  - Show customer: `Metal Green Saudi Arabia`.
-  - Explain the audit trail: Created in `Draft` $\rightarrow$ Submitted for Approval $\rightarrow$ Approved by Manager role $\rightarrow$ Automatically submitted to `To Deliver and Bill`.
-
-### Step 5: Intercompany Invoicing (Task 5)
-- Open **Sales Invoice `ACC-SINV-2026-00001`** in `Ecofinit Dubai`:
-  - Show billed amount: SAR 200,000 (AED 196,000).
-- Open **Purchase Invoice `ACC-PINV-2026-00002`** in `Metal Green Saudi Arabia`:
-  - Show auto-populated intercompany invoice reference: `ACC-SINV-2026-00001`.
-  - Show `Update Stock = 1` into `Stores - MGSA`.
-
-### Step 6: Metal Green Stock Movement (Task 6)
-- Open **Stock Entry `MAT-STE-2026-00001`** (Material Transfer):
-  - Show Source Warehouse: `Stores - MGSA`.
-  - Show Target Warehouse: `Finished Goods - MGSA` (50 MT).
-- Open **Stock Ledger** filtered by `Metal Green Saudi Arabia`:
-  - Show +100 MT in `Stores - MGSA`.
-  - Show -50 MT out of `Stores - MGSA` (50 MT balance remaining).
-  - Show +50 MT into `Finished Goods - MGSA` (50 MT balance).
-
-### Step 7: Intercompany Transaction Tracker (Task 7)
-- Open **`Intercompany Transaction Tracker`**:
-  - Demonstrate the clean 10-column layout fitting standard screen widths without horizontal scroll.
-  - Show clickable document navigation linking directly into Ecofinit's Sales Invoice and Metal Green's Purchase Invoice.
-  - Highlight real-time status indicators (`Unpaid`) and live warehouse split (`50 Stores / 50 FG`).
-- Run the automated test suite in terminal to prove unit test coverage:
-  ```bash
-  bench --site machinetest.local run-tests --module intercompany_tracker.intercompany_tracker.report.intercompany_transaction_tracker.test_intercompany_transaction_tracker
-  ```
-
 ---
 
 ## License
